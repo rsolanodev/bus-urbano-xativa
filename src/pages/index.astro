@@ -1,0 +1,25 @@
+---
+import MapShell from "../components/MapShell.astro";
+import Sidebar from "../components/Sidebar.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Autobús urbano de Xàtiva · Mapa interactivo L1 y L2";
+const description = "Mapa interactivo de las líneas L1 y L2 del autobús urbano de Xàtiva, con paradas, horarios, frecuencias y tiempos estimados.";
+---
+
+<BaseLayout {title} {description}>
+  <div class="app">
+    <Sidebar />
+    <MapShell />
+  </div>
+
+  <noscript>
+    <div class="noscript-notice">
+      Este mapa necesita JavaScript para mostrar las capas, los horarios y las paradas.
+    </div>
+  </noscript>
+
+  <script>
+    import "../scripts/app.js";
+  </script>
+</BaseLayout>

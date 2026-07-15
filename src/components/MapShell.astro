@@ -1,0 +1,40 @@
+<main class="map-shell" aria-label="Mapa interactivo">
+  <div id="map" aria-label="Mapa de las rutas de autobús de Xàtiva"></div>
+  <div id="fallbackMap" hidden aria-label="Plano esquemático alternativo">
+    <div id="fallbackCanvas"></div>
+    <div class="fallback-note"><strong>Plano esquemático.</strong> No se ha podido cargar la librería cartográfica; las capas, paradas y horarios siguen siendo interactivos.</div>
+    <div id="fallbackPopup" class="fallback-popup" hidden></div>
+  </div>
+
+  <div class="map-toolbar">
+    <div class="map-title-card">
+      <strong id="mapHeadline">L1 · Regular al Hospital</strong>
+      <span id="mapSubline">Lunes a viernes no festivos · 15 vueltas · línea azul continua</span>
+    </div>
+
+    <div class="map-actions" aria-label="Controles del mapa">
+      <button class="map-action-btn layer-toggle" data-layer="regular" aria-pressed="true" type="button">
+        <span class="layer-swatch"></span><span class="action-label">L1</span>
+      </button>
+      <button class="map-action-btn layer-toggle" data-layer="commercial" aria-pressed="false" type="button">
+        <span class="layer-swatch"></span><span class="action-label">L2</span>
+      </button>
+      <button class="map-action-btn" data-action="fit" type="button" title="Reencuadrar rutas">
+        <span aria-hidden="true">⌗</span><span class="action-label">Reencuadrar</span>
+      </button>
+      <button class="map-action-btn" data-action="locate" type="button" title="Mostrar mi ubicación">
+        <span aria-hidden="true">◎</span><span class="action-label">Mi ubicación</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="map-bottom">
+    <div class="legend-card" aria-label="Leyenda">
+      <span class="legend-item"><span class="legend-line"></span> L1 · laborables</span>
+      <span class="legend-item"><span class="legend-line l2"></span> L2 · tardes comerciales</span>
+    </div>
+    <div class="map-caveat">Trazado y posiciones aproximados. Pulsa una parada para ver la vuelta seleccionada y el tiempo previsto.</div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</main>

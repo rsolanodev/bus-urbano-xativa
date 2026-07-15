@@ -1,0 +1,125 @@
+<aside class="sidebar" aria-label="Información de rutas y horarios">
+  <header class="sidebar-head">
+    <div class="eyebrow">Movilidad urbana</div>
+    <h1>Autobús urbano de Xàtiva</h1>
+    <p class="subtitle">Ruta regular al Hospital y servicio de Zona Comercial, con 15 paradas principales, vueltas, frecuencia y tiempos de paso.</p>
+    <div class="freshness"><span class="freshness-dot"></span> Horario regular vigente desde 23·06·2025</div>
+
+    <div class="service-switch" role="tablist" aria-label="Seleccionar línea">
+      <button class="service-tab active" data-service="regular" role="tab" aria-selected="true">
+        <span class="service-tab-top">
+          <span class="route-code l1">L1</span>
+          <span class="service-symbol">● mañana</span>
+        </span>
+        <span class="service-name">Regular · Hospital</span>
+        <span class="service-meta">L–V no festivos · 15 vueltas</span>
+      </button>
+
+      <button class="service-tab" data-service="commercial" role="tab" aria-selected="false">
+        <span class="service-tab-top">
+          <span class="route-code l2">L2</span>
+          <span class="service-symbol">┄ tarde</span>
+        </span>
+        <span class="service-name">Zona Comercial</span>
+        <span class="service-meta">Vie · sáb · vísperas · 11 vueltas</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Secciones del mapa">
+    <button class="tab-btn active" data-tab="stops" aria-selected="true">Paradas</button>
+    <button class="tab-btn" data-tab="schedule" aria-selected="false">Horarios</button>
+    <button class="tab-btn" data-tab="info" aria-selected="false">Notas y datos</button>
+  </nav>
+
+  <div class="panel-scroll">
+    <section id="panel-stops" class="panel" aria-label="Paradas">
+      <div id="routeSummary" class="route-summary regular"></div>
+
+      <label class="control-label" for="tripSelect">Vuelta seleccionada</label>
+      <div class="trip-control">
+        <div class="select-wrap">
+          <select id="tripSelect" aria-label="Seleccionar vuelta"></select>
+        </div>
+        <button id="playTour" class="play-btn" type="button" title="Reproducir recorrido">
+          <span aria-hidden="true">▶</span><span class="play-label">Recorrer</span>
+        </button>
+      </div>
+
+      <div id="tripChips" class="trip-chips" aria-label="Salidas del servicio"></div>
+      <div id="tripInsight" class="trip-insight"></div>
+      <div id="tripNote" class="trip-note"></div>
+
+      <div class="search-row">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="stopSearch" type="search" autocomplete="off" placeholder="Buscar parada…" aria-label="Buscar parada" />
+        <button id="clearSearch" class="clear-search" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</button>
+      </div>
+
+      <div id="stopList" class="stop-list" aria-live="polite"></div>
+    </section>
+
+    <section id="panel-schedule" class="panel" hidden aria-label="Horarios y frecuencias">
+      <h2 id="scheduleTitle" class="section-title"></h2>
+      <p id="scheduleLead" class="section-lead"></p>
+      <div id="frequencyCard" class="frequency-card"></div>
+      <div id="scheduleTable" class="table-wrap"></div>
+    </section>
+
+    <section id="panel-info" class="panel" hidden aria-label="Notas, fuentes y descargas">
+      <h2 class="section-title">Criterio y fuentes</h2>
+      <p class="section-lead">El horario se apoya en publicaciones oficiales y fichas operativas actuales. La geometría se ha reconstruido para facilitar la lectura del recorrido.</p>
+
+      <div class="info-card warning">
+        <h3>Precisión del trazado</h3>
+        <p>Las ubicaciones de las paradas y las líneas dibujadas son <strong>orientativas</strong>: se han situado a partir de los nombres publicados, puntos de referencia y mapas públicos. No deben utilizarse como navegación giro a giro.</p>
+        <p>Los tiempos entre paradas son estimaciones del patrón publicado. Tráfico, accesibilidad, esperas en RENFE y adaptación a turnos del Hospital pueden alterar el paso real.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Qué significa “fin de semana” en la L2</h3>
+        <p>El operador publica servicio de Zona Comercial los <strong>viernes, sábados y vísperas de festivo</strong>, de 16:00 a 21:00. No figura servicio ordinario los domingos.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Fuentes consultadas</h3>
+        <div class="source-list">
+          <a class="source-link" href="https://blog.xativa.es/es/2025/06/16/xativa-adelanta-10-minutos-el-horario-del-autobus-urbano-a-partir-del-23-de-junio/" target="_blank" rel="noopener noreferrer">
+            <span class="source-icon">🏛</span>
+            <span><strong>Ajuntament de Xàtiva · cambio de horario 2025</strong><span>15 vueltas, primera salida 07:20 y última 14:30.</span></span>
+            <span class="source-arrow">↗</span>
+          </a>
+          <a class="source-link" href="https://blog.xativa.es/es/2023/06/06/el-nuevo-servicio-de-bus-urbano-de-xativa-ya-esta-en-marcha/" target="_blank" rel="noopener noreferrer">
+            <span class="source-icon">🚏</span>
+            <span><strong>Ajuntament de Xàtiva · servicio y paradas</strong><span>15 paradas, recorrido circular de 8,89 km y línea comercial.</span></span>
+            <span class="source-arrow">↗</span>
+          </a>
+          <a class="source-link" href="https://autobuseschambitos.com/horarios/" target="_blank" rel="noopener noreferrer">
+            <span class="source-icon">🚌</span>
+            <span><strong>Autobuses Chambitos · horarios</strong><span>L1 laborables y L2 viernes, sábado y vísperas.</span></span>
+            <span class="source-arrow">↗</span>
+          </a>
+          <a class="source-link" href="https://appassets.mvtdev.com/map/149/l/1669/285742203.pdf" target="_blank" rel="noopener noreferrer">
+            <span class="source-icon">L1</span>
+            <span><strong>Ficha de recorrido L1</strong><span>Secuencia actual de paradas y mapa público.</span></span>
+            <span class="source-arrow">↗</span>
+          </a>
+          <a class="source-link" href="https://appassets.mvtdev.com/map/149/l/1669/285742204.pdf" target="_blank" rel="noopener noreferrer">
+            <span class="source-icon">L2</span>
+            <span><strong>Ficha de recorrido L2</strong><span>Paradas de Zona Comercial y franja de servicio.</span></span>
+            <span class="source-arrow">↗</span>
+          </a>
+        </div>
+
+        <div class="download-row">
+          <button id="downloadGeoJSON" class="download-btn" type="button">Descargar GeoJSON</button>
+          <button id="downloadCSV" class="download-btn" type="button">Descargar horarios CSV</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="sidebar-foot">
+    Consulta avisos temporales antes de viajar. Datos de horario comprobados en julio de 2026; base cartográfica © OpenStreetMap contributors.
+  </footer>
+</aside>
