@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="es">
+<html lang="ca-valencia">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0f2748">
-  <meta name="description" content="Mapa interactivo de las líneas L1 y L2 del autobús urbano de Xàtiva, con paradas, horarios, frecuencias y tiempos estimados.">
-  <title>Autobús urbano de Xàtiva · Mapa interactivo L1 y L2</title>
+  <meta name="description" content="Mapa interactiu de les línies L1 i L2 de l'autobús urbà de Xàtiva, amb parades, horaris, freqüències i temps estimats.">
+  <title>Autobús urbà de Xàtiva · Mapa interactiu L1 i L2</title>
 
   <link
     rel="stylesheet"
@@ -81,11 +81,19 @@
       border-bottom: 1px solid var(--line);
     }
 
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 7px;
+    }
+
     .eyebrow {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 7px;
+      margin-bottom: 0;
       color: var(--l1-dark);
       font-size: 11px;
       font-weight: 800;
@@ -99,6 +107,33 @@
       border-radius: 999px;
       background: linear-gradient(90deg, var(--l1) 0 54%, var(--l2) 54%);
     }
+
+    .language-switch {
+      display: inline-flex;
+      flex: none;
+      padding: 2px;
+      background: #e8eef6;
+      border: 1px solid #d3deea;
+      border-radius: 9px;
+    }
+    .language-btn {
+      min-width: 31px;
+      padding: 4px 6px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 7px;
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .language-btn.active {
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(16, 35, 63, .14);
+    }
+    .language-btn:focus-visible { outline: 2px solid var(--l1); outline-offset: 2px; }
 
     h1 {
       margin: 0;
@@ -782,15 +817,18 @@
       border-radius: 11px;
     }
     .source-link:hover { background: #eaf1f8; }
-    .source-icon {
+    .source-link .source-icon {
       display: grid;
       place-items: center;
       width: 28px;
       height: 28px;
+      margin-top: 0;
+      color: var(--ink);
       background: #fff;
       border: 1px solid var(--line);
       border-radius: 9px;
       font-size: 12px;
+      line-height: 1;
     }
     .source-link strong {
       display: block;
@@ -1288,168 +1326,174 @@
 
 <body>
   <div class="app">
-    <aside class="sidebar" aria-label="Información de rutas y horarios">
+    <aside class="sidebar" aria-label="Informació de rutes i horaris" data-i18n-aria="sidebar.label">
       <header class="sidebar-head">
-        <div class="eyebrow">Movilidad urbana</div>
-        <h1>Autobús urbano de Xàtiva</h1>
-        <p class="subtitle">Ruta regular al Hospital y servicio de Zona Comercial, con 15 paradas principales, vueltas, frecuencia y tiempos de paso.</p>
-        <div class="freshness"><span class="freshness-dot"></span> Horario regular vigente desde 23·06·2025</div>
+        <div class="header-top">
+          <div class="eyebrow" data-i18n="header.eyebrow">Mobilitat urbana</div>
+          <div class="language-switch" role="group" aria-label="Seleccionar idioma" data-i18n-aria="language.label">
+            <button class="language-btn active" type="button" data-locale="ca-valencia" aria-pressed="true" title="Valencià">VAL</button>
+            <button class="language-btn" type="button" data-locale="es" aria-pressed="false" title="Castellano">CAS</button>
+          </div>
+        </div>
+        <h1 data-i18n="header.title">Autobús urbà de Xàtiva</h1>
+        <p class="subtitle" data-i18n="header.subtitle">Ruta regular a l'Hospital i servei de Zona Comercial, amb 15 parades principals, voltes, freqüència i temps de pas.</p>
+        <div class="freshness"><span class="freshness-dot"></span><span data-i18n="header.freshness">Horari regular vigent des del 23·06·2025</span></div>
 
-        <div class="service-switch" role="tablist" aria-label="Seleccionar línea">
+        <div class="service-switch" role="tablist" aria-label="Seleccionar línia" data-i18n-aria="service.select">
           <button class="service-tab active" data-service="regular" role="tab" aria-selected="true">
             <span class="service-tab-top">
               <span class="route-code l1">L1</span>
-              <span class="service-symbol">● mañana</span>
+              <span class="service-symbol" data-i18n="service.morning">● matí</span>
             </span>
             <span class="service-name">Regular · Hospital</span>
-            <span class="service-meta">L–V no festivos · 15 vueltas</span>
+            <span class="service-meta" data-i18n="service.regular.meta">Dl–Dv no festius · 15 voltes</span>
           </button>
 
           <button class="service-tab" data-service="commercial" role="tab" aria-selected="false">
             <span class="service-tab-top">
               <span class="route-code l2">L2</span>
-              <span class="service-symbol">┄ tarde</span>
+              <span class="service-symbol" data-i18n="service.afternoon">┄ vesprada</span>
             </span>
             <span class="service-name">Zona Comercial</span>
-            <span class="service-meta">Vie · sáb · vísperas · 11 vueltas</span>
+            <span class="service-meta" data-i18n="service.commercial.meta">Dv · ds · vespres · 11 voltes</span>
           </button>
         </div>
       </header>
 
-      <nav class="tabs" aria-label="Secciones del mapa">
-        <button class="tab-btn active" data-tab="stops" aria-selected="true">Paradas</button>
-        <button class="tab-btn" data-tab="schedule" aria-selected="false">Horarios</button>
-        <button class="tab-btn" data-tab="info" aria-selected="false">Notas y datos</button>
+      <nav class="tabs" aria-label="Seccions del mapa" data-i18n-aria="nav.label">
+        <button class="tab-btn active" data-tab="stops" aria-selected="true" data-i18n="nav.stops">Parades</button>
+        <button class="tab-btn" data-tab="schedule" aria-selected="false" data-i18n="nav.schedule">Horaris</button>
+        <button class="tab-btn" data-tab="info" aria-selected="false" data-i18n="nav.info">Notes i dades</button>
       </nav>
 
       <div class="panel-scroll">
-        <section id="panel-stops" class="panel" aria-label="Paradas">
+        <section id="panel-stops" class="panel" aria-label="Parades" data-i18n-aria="nav.stops">
           <div id="routeSummary" class="route-summary regular"></div>
 
-          <label class="control-label" for="tripSelect">Vuelta seleccionada</label>
+          <label class="control-label" for="tripSelect" data-i18n="trip.selected">Volta seleccionada</label>
           <div class="trip-control">
             <div class="select-wrap">
-              <select id="tripSelect" aria-label="Seleccionar vuelta"></select>
+              <select id="tripSelect" aria-label="Seleccionar volta" data-i18n-aria="trip.select"></select>
             </div>
-            <button id="playTour" class="play-btn" type="button" title="Reproducir recorrido">
-              <span aria-hidden="true">▶</span><span class="play-label">Recorrer</span>
+            <button id="playTour" class="play-btn" type="button" title="Reproduir el recorregut" data-i18n-title="tour.playTitle">
+              <span aria-hidden="true">▶</span><span class="play-label" data-i18n="tour.play">Recórrer</span>
             </button>
           </div>
 
-          <div id="tripChips" class="trip-chips" aria-label="Salidas del servicio"></div>
+          <div id="tripChips" class="trip-chips" aria-label="Eixides del servei" data-i18n-aria="trip.departures"></div>
           <div id="tripInsight" class="trip-insight"></div>
           <div id="tripNote" class="trip-note"></div>
 
           <div class="search-row">
             <span class="search-icon" aria-hidden="true">⌕</span>
-            <input id="stopSearch" type="search" autocomplete="off" placeholder="Buscar parada…" aria-label="Buscar parada">
-            <button id="clearSearch" class="clear-search" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">×</button>
+            <input id="stopSearch" type="search" autocomplete="off" placeholder="Buscar parada…" aria-label="Buscar parada" data-i18n-placeholder="search.placeholder" data-i18n-aria="search.label">
+            <button id="clearSearch" class="clear-search" type="button" title="Netejar la busca" aria-label="Netejar la busca" data-i18n-title="search.clear" data-i18n-aria="search.clear">×</button>
           </div>
 
           <div id="stopList" class="stop-list" aria-live="polite"></div>
         </section>
 
-        <section id="panel-schedule" class="panel" hidden aria-label="Horarios y frecuencias">
+        <section id="panel-schedule" class="panel" hidden aria-label="Horaris i freqüències" data-i18n-aria="schedule.label">
           <h2 id="scheduleTitle" class="section-title"></h2>
           <p id="scheduleLead" class="section-lead"></p>
           <div id="frequencyCard" class="frequency-card"></div>
           <div id="scheduleTable" class="table-wrap"></div>
         </section>
 
-        <section id="panel-info" class="panel" hidden aria-label="Notas, fuentes y descargas">
-          <h2 class="section-title">Criterio y fuentes</h2>
-          <p class="section-lead">El horario se apoya en publicaciones oficiales y fichas operativas actuales. La geometría se ha reconstruido para facilitar la lectura del recorrido.</p>
+        <section id="panel-info" class="panel" hidden aria-label="Notes, fonts i descàrregues" data-i18n-aria="info.label">
+          <h2 class="section-title" data-i18n="info.title">Criteri i fonts</h2>
+          <p class="section-lead" data-i18n="info.lead">L'horari es basa en publicacions oficials i fitxes operatives actuals. La geometria s'ha reconstruït per a facilitar la lectura del recorregut.</p>
 
           <div class="info-card warning">
-            <h3>Precisión del trazado</h3>
-            <p>Las ubicaciones de las paradas y las líneas dibujadas son <strong>orientativas</strong>: se han situado a partir de los nombres publicados, puntos de referencia y mapas públicos. No deben utilizarse como navegación giro a giro.</p>
-            <p>Los tiempos entre paradas son estimaciones del patrón publicado. Tráfico, accesibilidad, esperas en RENFE y adaptación a turnos del Hospital pueden alterar el paso real.</p>
+            <h3 data-i18n="info.accuracyTitle">Precisió del traçat</h3>
+            <p data-i18n-html="info.accuracyOne">Les ubicacions de les parades i les línies dibuixades són <strong>orientatives</strong>: s'han situat a partir dels noms publicats, punts de referència i mapes públics. No s'han d'utilitzar com a navegació gir a gir.</p>
+            <p data-i18n="info.accuracyTwo">Els temps entre parades són estimacions del patró publicat. El trànsit, l'accessibilitat, les esperes en RENFE i l'adaptació als torns de l'Hospital poden alterar el pas real.</p>
           </div>
 
           <div class="info-card">
-            <h3>Qué significa “fin de semana” en la L2</h3>
-            <p>El operador publica servicio de Zona Comercial los <strong>viernes, sábados y vísperas de festivo</strong>, de 16:00 a 21:00. No figura servicio ordinario los domingos.</p>
+            <h3 data-i18n="info.weekendTitle">Què significa «cap de setmana» en l'L2</h3>
+            <p data-i18n-html="info.weekendText">L'operador publica servei de Zona Comercial els <strong>divendres, dissabtes i vespres de festiu</strong>, de 16:00 a 21:00. No hi figura servei ordinari els diumenges.</p>
           </div>
 
           <div class="info-card">
-            <h3>Fuentes consultadas</h3>
+            <h3 data-i18n="sources.title">Fonts consultades</h3>
             <div class="source-list">
               <a class="source-link" href="https://blog.xativa.es/es/2025/06/16/xativa-adelanta-10-minutos-el-horario-del-autobus-urbano-a-partir-del-23-de-junio/" target="_blank" rel="noopener noreferrer">
                 <span class="source-icon">🏛</span>
-                <span><strong>Ajuntament de Xàtiva · cambio de horario 2025</strong><span>15 vueltas, primera salida 07:20 y última 14:30.</span></span>
+                <span><strong data-i18n="sources.city2025Title">Ajuntament de Xàtiva · canvi d'horari 2025</strong><span data-i18n="sources.city2025Text">15 voltes, primera eixida a les 07:20 i última a les 14:30.</span></span>
                 <span class="source-arrow">↗</span>
               </a>
               <a class="source-link" href="https://blog.xativa.es/es/2023/06/06/el-nuevo-servicio-de-bus-urbano-de-xativa-ya-esta-en-marcha/" target="_blank" rel="noopener noreferrer">
                 <span class="source-icon">🚏</span>
-                <span><strong>Ajuntament de Xàtiva · servicio y paradas</strong><span>15 paradas, recorrido circular de 8,89 km y línea comercial.</span></span>
+                <span><strong data-i18n="sources.cityStopsTitle">Ajuntament de Xàtiva · servei i parades</strong><span data-i18n="sources.cityStopsText">15 parades, recorregut circular de 8,89 km i línia comercial.</span></span>
                 <span class="source-arrow">↗</span>
               </a>
               <a class="source-link" href="https://autobuseschambitos.com/horarios/" target="_blank" rel="noopener noreferrer">
                 <span class="source-icon">🚌</span>
-                <span><strong>Autobuses Chambitos · horarios</strong><span>L1 laborables y L2 viernes, sábado y vísperas.</span></span>
+                <span><strong data-i18n="sources.operatorTitle">Autobuses Chambitos · horaris</strong><span data-i18n="sources.operatorText">L1 laborables i L2 divendres, dissabte i vespres.</span></span>
                 <span class="source-arrow">↗</span>
               </a>
               <a class="source-link" href="https://appassets.mvtdev.com/map/149/l/1669/285742203.pdf" target="_blank" rel="noopener noreferrer">
                 <span class="source-icon">L1</span>
-                <span><strong>Ficha de recorrido L1</strong><span>Secuencia actual de paradas y mapa público.</span></span>
+                <span><strong data-i18n="sources.l1Title">Fitxa de recorregut L1</strong><span data-i18n="sources.l1Text">Seqüència actual de parades i mapa públic.</span></span>
                 <span class="source-arrow">↗</span>
               </a>
               <a class="source-link" href="https://appassets.mvtdev.com/map/149/l/1669/285742204.pdf" target="_blank" rel="noopener noreferrer">
                 <span class="source-icon">L2</span>
-                <span><strong>Ficha de recorrido L2</strong><span>Paradas de Zona Comercial y franja de servicio.</span></span>
+                <span><strong data-i18n="sources.l2Title">Fitxa de recorregut L2</strong><span data-i18n="sources.l2Text">Parades de Zona Comercial i franja de servei.</span></span>
                 <span class="source-arrow">↗</span>
               </a>
             </div>
 
             <div class="download-row">
-              <button id="downloadGeoJSON" class="download-btn" type="button">Descargar GeoJSON</button>
-              <button id="downloadCSV" class="download-btn" type="button">Descargar horarios CSV</button>
+              <button id="downloadGeoJSON" class="download-btn" type="button" data-i18n="download.geojson">Descarregar GeoJSON</button>
+              <button id="downloadCSV" class="download-btn" type="button" data-i18n="download.csv">Descarregar horaris CSV</button>
             </div>
           </div>
         </section>
       </div>
 
-      <footer class="sidebar-foot">
-        Consulta avisos temporales antes de viajar. Datos de horario comprobados en julio de 2026; base cartográfica © OpenStreetMap contributors.
+      <footer class="sidebar-foot" data-i18n="footer.text">
+        Consulta els avisos temporals abans de viatjar. Dades d'horari comprovades el juliol de 2026; base cartogràfica © OpenStreetMap contributors.
       </footer>
     </aside>
 
-    <main class="map-shell" aria-label="Mapa interactivo">
-      <div id="map" aria-label="Mapa de las rutas de autobús de Xàtiva"></div>
-      <div id="fallbackMap" hidden aria-label="Plano esquemático alternativo">
+    <main class="map-shell" aria-label="Mapa interactiu" data-i18n-aria="map.label">
+      <div id="map" aria-label="Mapa de les rutes d'autobús de Xàtiva" data-i18n-aria="map.routesLabel"></div>
+      <div id="fallbackMap" hidden aria-label="Plànol esquemàtic alternatiu" data-i18n-aria="map.fallbackLabel">
         <div id="fallbackCanvas"></div>
-        <div class="fallback-note"><strong>Plano esquemático.</strong> No se ha podido cargar la librería cartográfica; las capas, paradas y horarios siguen siendo interactivos.</div>
+        <div class="fallback-note" data-i18n-html="map.fallbackNote"><strong>Plànol esquemàtic.</strong> No s'ha pogut carregar la biblioteca cartogràfica; les capes, parades i horaris continuen sent interactius.</div>
         <div id="fallbackPopup" class="fallback-popup" hidden></div>
       </div>
 
       <div class="map-toolbar">
         <div class="map-title-card">
-          <strong id="mapHeadline">L1 · Regular al Hospital</strong>
-          <span id="mapSubline">Lunes a viernes no festivos · 15 vueltas · línea azul continua</span>
+          <strong id="mapHeadline">L1 · Regular · Hospital</strong>
+          <span id="mapSubline">Dilluns a divendres no festius · 15 voltes · línia blava contínua</span>
         </div>
 
-        <div class="map-actions" aria-label="Controles del mapa">
+        <div class="map-actions" aria-label="Controls del mapa" data-i18n-aria="map.controls">
           <button class="map-action-btn layer-toggle" data-layer="regular" aria-pressed="true" type="button">
             <span class="layer-swatch"></span><span class="action-label">L1</span>
           </button>
           <button class="map-action-btn layer-toggle" data-layer="commercial" aria-pressed="false" type="button">
             <span class="layer-swatch"></span><span class="action-label">L2</span>
           </button>
-          <button class="map-action-btn" data-action="fit" type="button" title="Reencuadrar rutas">
-            <span aria-hidden="true">⌗</span><span class="action-label">Reencuadrar</span>
+          <button class="map-action-btn" data-action="fit" type="button" title="Reenquadrar les rutes" data-i18n-title="map.fitTitle">
+            <span aria-hidden="true">⌗</span><span class="action-label" data-i18n="map.fit">Reenquadrar</span>
           </button>
-          <button class="map-action-btn" data-action="locate" type="button" title="Mostrar mi ubicación">
-            <span aria-hidden="true">◎</span><span class="action-label">Mi ubicación</span>
+          <button class="map-action-btn" data-action="locate" type="button" title="Mostrar la meua ubicació" data-i18n-title="map.locateTitle">
+            <span aria-hidden="true">◎</span><span class="action-label" data-i18n="map.locate">La meua ubicació</span>
           </button>
         </div>
       </div>
 
       <div class="map-bottom">
-        <div class="legend-card" aria-label="Leyenda">
-          <span class="legend-item"><span class="legend-line"></span> L1 · laborables</span>
-          <span class="legend-item"><span class="legend-line l2"></span> L2 · tardes comerciales</span>
+        <div class="legend-card" aria-label="Llegenda" data-i18n-aria="map.legend">
+          <span class="legend-item"><span class="legend-line"></span><span data-i18n="map.legendL1">L1 · laborables</span></span>
+          <span class="legend-item"><span class="legend-line l2"></span><span data-i18n="map.legendL2">L2 · vesprades comercials</span></span>
         </div>
-        <div class="map-caveat">Trazado y posiciones aproximados. Pulsa una parada para ver la vuelta seleccionada y el tiempo previsto.</div>
+        <div class="map-caveat" data-i18n="map.caveat">Traçat i posicions aproximats. Prem una parada per a veure la volta seleccionada i el temps previst.</div>
       </div>
 
       <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -1458,7 +1502,7 @@
 
   <noscript>
     <div style="position:fixed;inset:20px;z-index:9999;padding:20px;background:#fff;border:1px solid #ccc;border-radius:12px;font-family:system-ui">
-      Este mapa necesita JavaScript para mostrar las capas, los horarios y las paradas.
+      Este mapa necessita JavaScript per a mostrar les capes, els horaris i les parades.
     </div>
   </noscript>
 
@@ -1478,6 +1522,295 @@
       commercialDark: "#b33c00"
     };
 
+    const TRANSLATIONS = {
+      "ca-valencia": {
+        "meta.title": "Autobús urbà de Xàtiva · Mapa interactiu L1 i L2",
+        "meta.description": "Mapa interactiu de les línies L1 i L2 de l'autobús urbà de Xàtiva, amb parades, horaris, freqüències i temps estimats.",
+        "sidebar.label": "Informació de rutes i horaris",
+        "language.label": "Seleccionar idioma",
+        "header.eyebrow": "Mobilitat urbana",
+        "header.title": "Autobús urbà de Xàtiva",
+        "header.subtitle": "Ruta regular a l'Hospital i servei de Zona Comercial, amb 15 parades principals, voltes, freqüència i temps de pas.",
+        "header.freshness": "Horari regular vigent des del 23·06·2025",
+        "service.select": "Seleccionar línia",
+        "service.morning": "● matí",
+        "service.afternoon": "┄ vesprada",
+        "service.regular.meta": "Dl–Dv no festius · 15 voltes",
+        "service.commercial.meta": "Dv · ds · vespres · 11 voltes",
+        "service.regular.name": "Regular · Hospital",
+        "service.regular.description": "Dilluns a divendres no festius",
+        "service.regular.style": "línia blava contínua",
+        "service.commercial.name": "Zona Comercial",
+        "service.commercial.description": "Divendres, dissabtes i vespres de festiu",
+        "service.commercial.style": "línia taronja discontínua",
+        "nav.label": "Seccions del mapa",
+        "nav.stops": "Parades",
+        "nav.schedule": "Horaris",
+        "nav.info": "Notes i dades",
+        "trip.selected": "Volta seleccionada",
+        "trip.select": "Seleccionar volta",
+        "trip.departures": "Eixides del servei",
+        "tour.playTitle": "Reproduir el recorregut",
+        "tour.play": "Recórrer",
+        "tour.stop": "Detindre",
+        "search.placeholder": "Buscar parada…",
+        "search.label": "Buscar parada",
+        "search.clear": "Netejar la busca",
+        "schedule.label": "Horaris i freqüències",
+        "info.label": "Notes, fonts i descàrregues",
+        "info.title": "Criteri i fonts",
+        "info.lead": "L'horari es basa en publicacions oficials i fitxes operatives actuals. La geometria s'ha reconstruït per a facilitar la lectura del recorregut.",
+        "info.accuracyTitle": "Precisió del traçat",
+        "info.accuracyOne": "Les ubicacions de les parades i les línies dibuixades són <strong>orientatives</strong>: s'han situat a partir dels noms publicats, punts de referència i mapes públics. No s'han d'utilitzar com a navegació gir a gir.",
+        "info.accuracyTwo": "Els temps entre parades són estimacions del patró publicat. El trànsit, l'accessibilitat, les esperes en RENFE i l'adaptació als torns de l'Hospital poden alterar el pas real.",
+        "info.weekendTitle": "Què significa «cap de setmana» en l'L2",
+        "info.weekendText": "L'operador publica servei de Zona Comercial els <strong>divendres, dissabtes i vespres de festiu</strong>, de 16:00 a 21:00. No hi figura servei ordinari els diumenges.",
+        "sources.title": "Fonts consultades",
+        "sources.city2025Title": "Ajuntament de Xàtiva · canvi d'horari 2025",
+        "sources.city2025Text": "15 voltes, primera eixida a les 07:20 i última a les 14:30.",
+        "sources.cityStopsTitle": "Ajuntament de Xàtiva · servei i parades",
+        "sources.cityStopsText": "15 parades, recorregut circular de 8,89 km i línia comercial.",
+        "sources.operatorTitle": "Autobuses Chambitos · horaris",
+        "sources.operatorText": "L1 laborables i L2 divendres, dissabte i vespres.",
+        "sources.l1Title": "Fitxa de recorregut L1",
+        "sources.l1Text": "Seqüència actual de parades i mapa públic.",
+        "sources.l2Title": "Fitxa de recorregut L2",
+        "sources.l2Text": "Parades de Zona Comercial i franja de servei.",
+        "download.geojson": "Descarregar GeoJSON",
+        "download.csv": "Descarregar horaris CSV",
+        "footer.text": "Consulta els avisos temporals abans de viatjar. Dades d'horari comprovades el juliol de 2026; base cartogràfica © OpenStreetMap contributors.",
+        "map.label": "Mapa interactiu",
+        "map.routesLabel": "Mapa de les rutes d'autobús de Xàtiva",
+        "map.fallbackLabel": "Plànol esquemàtic alternatiu",
+        "map.fallbackNote": "<strong>Plànol esquemàtic.</strong> No s'ha pogut carregar la biblioteca cartogràfica; les capes, parades i horaris continuen sent interactius.",
+        "map.controls": "Controls del mapa",
+        "map.fitTitle": "Reenquadrar les rutes",
+        "map.fit": "Reenquadrar",
+        "map.locateTitle": "Mostrar la meua ubicació",
+        "map.locate": "La meua ubicació",
+        "map.legend": "Llegenda",
+        "map.legendL1": "L1 · laborables",
+        "map.legendL2": "L2 · vesprades comercials",
+        "map.caveat": "Traçat i posicions aproximats. Prem una parada per a veure la volta seleccionada i el temps previst.",
+        "status.published": "publicat",
+        "status.estimated": "estimat",
+        "summary.regular.description": "Recorregut circular urbà de 8,89 km amb 15 parades principals.",
+        "summary.commercial.description": "7 parades úniques; la fitxa en compta 8 perquè repeteix Albereda en tancar la volta.",
+        "summary.workday": "laborable",
+        "summary.commercial": "comercial",
+        "summary.stops": "parades",
+        "summary.uniqueStops": "parades úniques",
+        "summary.trips": "voltes",
+        "summary.first": "primera",
+        "summary.last": "última eixida",
+        "trip.option": "Volta {number} · {time}{suffix}",
+        "trip.returnSuffix": " · tornada ≈{time}",
+        "trip.officialDeparture": "eixida oficial",
+        "trip.publishedHospital": "Hospital publicat",
+        "trip.nearbyInterval": "interval pròxim",
+        "trip.regularStandard": "Esta volta seguix el patró estàndard d'uns 28 minuts fins a l'Hospital.",
+        "trip.regularLonger": "Esta volta incorpora una adaptació publicada: {duration} min fins a l'Hospital, {delta} min més que el patró estàndard.",
+        "trip.regularShorter": "Esta volta figura amb {duration} min fins a l'Hospital, {delta} min menys que el patró estàndard.",
+        "trip.note": "<strong>Volta {number}:</strong> {variation} Els passos intermedis que mostra el mapa són estimats.",
+        "trip.alberedaDeparture": "eixida d'Albereda",
+        "trip.complete": "volta completa",
+        "trip.commercialNote": "<strong>Freqüència:</strong> una eixida cada 30 minuts. Servei publicat per a divendres, dissabtes i vespres de festiu; sense servei ordinari els diumenges.",
+        "stops.empty": "No hi ha parades que coincidisquen amb «{query}».",
+        "stops.return": "↻ tornada a Albereda · ≈14 min",
+        "stops.end": "Final del recorregut publicat",
+        "stops.aria": "Parada {number}, {name}, pas {time}",
+        "schedule.regularTitle": "15 voltes laborables",
+        "schedule.regularLead": "Eixides oficials des de Cosmógrafo Ramírez. L'interval habitual és de 30 minuts; els intervals publicats oscil·len entre 28 i 38 minuts.",
+        "schedule.commercialTitle": "11 voltes de Zona Comercial",
+        "schedule.commercialLead": "Eixides estimades cada 30 minuts des d'Albereda Jaume I, 18, entre les 16:00 i les 21:00.",
+        "schedule.average": "mitjana {value} min",
+        "schedule.every": "cada 30 min",
+        "schedule.sequence": "Seqüència d'eixides",
+        "schedule.intervals": "Intervals: {min}–{max} min",
+        "schedule.uniform": "Interval uniforme de 30 min",
+        "schedule.start": "inici",
+        "schedule.trip": "Volta",
+        "schedule.interval": "Interval",
+        "schedule.publishedHospital": "Hospital publicat",
+        "schedule.duration": "Duració",
+        "schedule.alberedaDeparture": "Eixida d'Albereda",
+        "schedule.return": "Tornada ≈",
+        "schedule.frequency": "Freqüència",
+        "map.heading": "{description} · {count} voltes · {style}",
+        "popup.next": "Següent: {stop} · ≈{minutes} min",
+        "popup.return": "Tornada estimada a Albereda en uns 14 min.",
+        "popup.arrival": "Arribada publicada a l'Hospital per a esta volta.",
+        "popup.trip": "Volta {number}",
+        "popup.pass": "pas {kind}",
+        "popup.departure": "eixida de la volta",
+        "popup.layers": "Capes disponibles: {lines}.",
+        "stop.riberaNote": "La taula municipal de 2025 la identifica com a Av. de la Ribera; algunes fitxes de tercers mostren Av. de la Murta.",
+        "toast.keepRoute": "Ha de romandre visible almenys una ruta.",
+        "toast.tourComplete": "{line}: recorregut visualitzat.",
+        "geo.unsupported": "Este navegador no oferix geolocalització.",
+        "geo.requesting": "Sol·licitant la teua ubicació…",
+        "geo.noMap": "Ubicació obtinguda; el mapa base no està disponible.",
+        "geo.yourLocation": "La teua ubicació",
+        "geo.approximate": "La teua ubicació aproximada",
+        "geo.accuracy": "Precisió: ±{accuracy} m",
+        "geo.shown": "Ubicació mostrada.",
+        "geo.denied": "No s'ha concedit permís d'ubicació.",
+        "geo.failed": "No s'ha pogut obtindre la ubicació.",
+        "fallback.svgLabel": "Plànol esquemàtic de les rutes",
+        "fallback.pass": "Pas {kind}",
+        "fallback.trip": "Volta {number} · eixida {time}",
+        "toast.fallbackFit": "El plànol esquemàtic ja mostra les rutes completes.",
+        "download.geojsonReady": "GeoJSON preparat.",
+        "download.csvReady": "CSV d'horaris preparat.",
+        "download.returnDestination": "Tornada a Albereda Jaume I, 18",
+        "download.collectionName": "Autobús urbà de Xàtiva - L1 i L2",
+        "download.csvHeaders": "linia,volta,eixida,desti_o_tornada,hora,interval_min,tipus"
+      },
+      es: {
+        "meta.title": "Autobús urbano de Xàtiva · Mapa interactivo L1 y L2",
+        "meta.description": "Mapa interactivo de las líneas L1 y L2 del autobús urbano de Xàtiva, con paradas, horarios, frecuencias y tiempos estimados.",
+        "sidebar.label": "Información de rutas y horarios",
+        "language.label": "Seleccionar idioma",
+        "header.eyebrow": "Movilidad urbana",
+        "header.title": "Autobús urbano de Xàtiva",
+        "header.subtitle": "Ruta regular al Hospital y servicio de Zona Comercial, con 15 paradas principales, vueltas, frecuencia y tiempos de paso.",
+        "header.freshness": "Horario regular vigente desde 23·06·2025",
+        "service.select": "Seleccionar línea",
+        "service.morning": "● mañana",
+        "service.afternoon": "┄ tarde",
+        "service.regular.meta": "L–V no festivos · 15 vueltas",
+        "service.commercial.meta": "Vie · sáb · vísperas · 11 vueltas",
+        "service.regular.name": "Regular · Hospital",
+        "service.regular.description": "Lunes a viernes no festivos",
+        "service.regular.style": "línea azul continua",
+        "service.commercial.name": "Zona Comercial",
+        "service.commercial.description": "Viernes, sábados y vísperas de festivo",
+        "service.commercial.style": "línea naranja discontinua",
+        "nav.label": "Secciones del mapa",
+        "nav.stops": "Paradas",
+        "nav.schedule": "Horarios",
+        "nav.info": "Notas y datos",
+        "trip.selected": "Vuelta seleccionada",
+        "trip.select": "Seleccionar vuelta",
+        "trip.departures": "Salidas del servicio",
+        "tour.playTitle": "Reproducir recorrido",
+        "tour.play": "Recorrer",
+        "tour.stop": "Detener",
+        "search.placeholder": "Buscar parada…",
+        "search.label": "Buscar parada",
+        "search.clear": "Limpiar búsqueda",
+        "schedule.label": "Horarios y frecuencias",
+        "info.label": "Notas, fuentes y descargas",
+        "info.title": "Criterio y fuentes",
+        "info.lead": "El horario se apoya en publicaciones oficiales y fichas operativas actuales. La geometría se ha reconstruido para facilitar la lectura del recorrido.",
+        "info.accuracyTitle": "Precisión del trazado",
+        "info.accuracyOne": "Las ubicaciones de las paradas y las líneas dibujadas son <strong>orientativas</strong>: se han situado a partir de los nombres publicados, puntos de referencia y mapas públicos. No deben utilizarse como navegación giro a giro.",
+        "info.accuracyTwo": "Los tiempos entre paradas son estimaciones del patrón publicado. Tráfico, accesibilidad, esperas en RENFE y adaptación a turnos del Hospital pueden alterar el paso real.",
+        "info.weekendTitle": "Qué significa «fin de semana» en la L2",
+        "info.weekendText": "El operador publica servicio de Zona Comercial los <strong>viernes, sábados y vísperas de festivo</strong>, de 16:00 a 21:00. No figura servicio ordinario los domingos.",
+        "sources.title": "Fuentes consultadas",
+        "sources.city2025Title": "Ajuntament de Xàtiva · cambio de horario 2025",
+        "sources.city2025Text": "15 vueltas, primera salida 07:20 y última 14:30.",
+        "sources.cityStopsTitle": "Ajuntament de Xàtiva · servicio y paradas",
+        "sources.cityStopsText": "15 paradas, recorrido circular de 8,89 km y línea comercial.",
+        "sources.operatorTitle": "Autobuses Chambitos · horarios",
+        "sources.operatorText": "L1 laborables y L2 viernes, sábado y vísperas.",
+        "sources.l1Title": "Ficha de recorrido L1",
+        "sources.l1Text": "Secuencia actual de paradas y mapa público.",
+        "sources.l2Title": "Ficha de recorrido L2",
+        "sources.l2Text": "Paradas de Zona Comercial y franja de servicio.",
+        "download.geojson": "Descargar GeoJSON",
+        "download.csv": "Descargar horarios CSV",
+        "footer.text": "Consulta avisos temporales antes de viajar. Datos de horario comprobados en julio de 2026; base cartográfica © OpenStreetMap contributors.",
+        "map.label": "Mapa interactivo",
+        "map.routesLabel": "Mapa de las rutas de autobús de Xàtiva",
+        "map.fallbackLabel": "Plano esquemático alternativo",
+        "map.fallbackNote": "<strong>Plano esquemático.</strong> No se ha podido cargar la librería cartográfica; las capas, paradas y horarios siguen siendo interactivos.",
+        "map.controls": "Controles del mapa",
+        "map.fitTitle": "Reencuadrar rutas",
+        "map.fit": "Reencuadrar",
+        "map.locateTitle": "Mostrar mi ubicación",
+        "map.locate": "Mi ubicación",
+        "map.legend": "Leyenda",
+        "map.legendL1": "L1 · laborables",
+        "map.legendL2": "L2 · tardes comerciales",
+        "map.caveat": "Trazado y posiciones aproximados. Pulsa una parada para ver la vuelta seleccionada y el tiempo previsto.",
+        "status.published": "publicado",
+        "status.estimated": "estimado",
+        "summary.regular.description": "Recorrido circular urbano de 8,89 km con 15 paradas principales.",
+        "summary.commercial.description": "7 paradas únicas; la ficha cuenta 8 al repetir Albereda al cerrar la vuelta.",
+        "summary.workday": "laborable",
+        "summary.commercial": "comercial",
+        "summary.stops": "paradas",
+        "summary.uniqueStops": "paradas únicas",
+        "summary.trips": "vueltas",
+        "summary.first": "primera",
+        "summary.last": "última salida",
+        "trip.option": "Vuelta {number} · {time}{suffix}",
+        "trip.returnSuffix": " · regreso ≈{time}",
+        "trip.officialDeparture": "salida oficial",
+        "trip.publishedHospital": "Hospital publicado",
+        "trip.nearbyInterval": "intervalo cercano",
+        "trip.regularStandard": "Esta vuelta sigue el patrón estándar de unos 28 minutos hasta el Hospital.",
+        "trip.regularLonger": "Esta vuelta incorpora una adaptación publicada: {duration} min hasta el Hospital, {delta} min más que el patrón estándar.",
+        "trip.regularShorter": "Esta vuelta figura con {duration} min hasta el Hospital, {delta} min menos que el patrón estándar.",
+        "trip.note": "<strong>Vuelta {number}:</strong> {variation} Los pasos intermedios que muestra el mapa son estimados.",
+        "trip.alberedaDeparture": "salida Albereda",
+        "trip.complete": "vuelta completa",
+        "trip.commercialNote": "<strong>Frecuencia:</strong> una salida cada 30 minutos. Servicio publicado para viernes, sábados y vísperas de festivo; sin servicio ordinario los domingos.",
+        "stops.empty": "No hay paradas que coincidan con «{query}».",
+        "stops.return": "↻ regreso a Albereda · ≈14 min",
+        "stops.end": "Fin del recorrido publicado",
+        "stops.aria": "Parada {number}, {name}, paso {time}",
+        "schedule.regularTitle": "15 vueltas laborables",
+        "schedule.regularLead": "Salidas oficiales desde Cosmógrafo Ramírez. El intervalo habitual es de 30 minutos; los huecos publicados oscilan entre 28 y 38 minutos.",
+        "schedule.commercialTitle": "11 vueltas de Zona Comercial",
+        "schedule.commercialLead": "Salidas estimadas cada 30 minutos desde Albereda Jaume I, 18, entre las 16:00 y las 21:00.",
+        "schedule.average": "media {value} min",
+        "schedule.every": "cada 30 min",
+        "schedule.sequence": "Secuencia de salidas",
+        "schedule.intervals": "Intervalos: {min}–{max} min",
+        "schedule.uniform": "Intervalo uniforme de 30 min",
+        "schedule.start": "inicio",
+        "schedule.trip": "Vuelta",
+        "schedule.interval": "Intervalo",
+        "schedule.publishedHospital": "Hospital publicado",
+        "schedule.duration": "Duración",
+        "schedule.alberedaDeparture": "Salida Albereda",
+        "schedule.return": "Regreso ≈",
+        "schedule.frequency": "Frecuencia",
+        "map.heading": "{description} · {count} vueltas · {style}",
+        "popup.next": "Siguiente: {stop} · ≈{minutes} min",
+        "popup.return": "Regreso estimado a Albereda en unos 14 min.",
+        "popup.arrival": "Llegada publicada al Hospital para esta vuelta.",
+        "popup.trip": "Vuelta {number}",
+        "popup.pass": "paso {kind}",
+        "popup.departure": "salida de vuelta",
+        "popup.layers": "Capas disponibles: {lines}.",
+        "stop.riberaNote": "La tabla municipal de 2025 la identifica como Av. de la Ribera; algunas fichas de terceros muestran Av. de la Murta.",
+        "toast.keepRoute": "Debe permanecer visible al menos una ruta.",
+        "toast.tourComplete": "{line}: recorrido visualizado.",
+        "geo.unsupported": "Este navegador no ofrece geolocalización.",
+        "geo.requesting": "Solicitando tu ubicación…",
+        "geo.noMap": "Ubicación obtenida; el mapa base no está disponible.",
+        "geo.yourLocation": "Tu ubicación",
+        "geo.approximate": "Tu ubicación aproximada",
+        "geo.accuracy": "Precisión: ±{accuracy} m",
+        "geo.shown": "Ubicación mostrada.",
+        "geo.denied": "No se ha concedido permiso de ubicación.",
+        "geo.failed": "No se ha podido obtener la ubicación.",
+        "fallback.svgLabel": "Plano esquemático de las rutas",
+        "fallback.pass": "Paso {kind}",
+        "fallback.trip": "Vuelta {number} · salida {time}",
+        "toast.fallbackFit": "El plano esquemático ya muestra las rutas completas.",
+        "download.geojsonReady": "GeoJSON preparado.",
+        "download.csvReady": "CSV de horarios preparado.",
+        "download.returnDestination": "Regreso Albereda Jaume I, 18",
+        "download.collectionName": "Autobús urbano de Xàtiva - L1 y L2",
+        "download.csvHeaders": "linea,vuelta,salida,destino_o_retorno,hora,intervalo_min,tipo"
+      }
+    };
+
     const regularStops = [
       { name: "Cosmógrafo Ramírez, 14", short: "Cosmógrafo Ramírez", lat: 38.99075, lng: -0.51355, lines: ["L1"] },
       { name: "Acadèmic Maravall / Av. de la Murta", short: "Acadèmic Maravall", lat: 38.99154, lng: -0.51664, lines: ["L1"] },
@@ -1492,7 +1825,7 @@
       { name: "Albereda Jaume I, 18 (Joieria Sancho)", short: "Albereda Jaume I, 18", lat: 38.98955, lng: -0.52295, lines: ["L1", "L2"] },
       { name: "Albereda Jaume I, 164 (Font del Lleó)", short: "Font del Lleó", lat: 38.99000, lng: -0.51875, lines: ["L1"] },
       { name: "Albereda Selgas (Farmàcia Llanderal)", short: "Albereda Selgas", lat: 38.99055, lng: -0.51640, lines: ["L1"] },
-      { name: "Av. de la Ribera", short: "Av. de la Ribera", lat: 38.99440, lng: -0.51140, lines: ["L1"], note: "La tabla municipal de 2025 la identifica como Av. de la Ribera; algunas fichas de terceros muestran Av. de la Murta." },
+      { name: "Av. de la Ribera", short: "Av. de la Ribera", lat: 38.99440, lng: -0.51140, lines: ["L1"], noteKey: "stop.riberaNote" },
       { name: "Hospital Lluís Alcanyís", short: "Hospital", lat: 39.00665, lng: -0.50959, lines: ["L1"] }
     ];
 
@@ -1600,9 +1933,9 @@
     const services = {
       regular: {
         code: "L1",
-        name: "Regular · Hospital",
-        description: "Lunes a viernes no festivos",
-        style: "línea azul continua",
+        nameKey: "service.regular.name",
+        descriptionKey: "service.regular.description",
+        styleKey: "service.regular.style",
         stops: regularStops,
         route: regularRoute,
         departures: regularDepartures,
@@ -1612,9 +1945,9 @@
       },
       commercial: {
         code: "L2",
-        name: "Zona Comercial",
-        description: "Viernes, sábados y vísperas de festivo",
-        style: "línea naranja discontinua",
+        nameKey: "service.commercial.name",
+        descriptionKey: "service.commercial.description",
+        styleKey: "service.commercial.style",
         stops: commercialStops,
         route: commercialRoute,
         departures: commercialDepartures,
@@ -1624,7 +1957,14 @@
       }
     };
 
+    let initialLocale = "ca-valencia";
+    try {
+      const savedLocale = localStorage.getItem("bus-xativa-locale");
+      if (["ca-valencia", "es"].includes(savedLocale)) initialLocale = savedLocale;
+    } catch {}
+
     const state = {
+      locale: initialLocale,
       activeService: "regular",
       selectedTrip: { regular: 0, commercial: 0 },
       selectedStop: { regular: 0, commercial: 0 },
@@ -1665,6 +2005,51 @@
       fallbackCanvas: document.getElementById("fallbackCanvas"),
       fallbackPopup: document.getElementById("fallbackPopup")
     };
+
+    function t(key, params = {}) {
+      const template = TRANSLATIONS[state.locale][key] ?? TRANSLATIONS["ca-valencia"][key] ?? key;
+      return template.replace(/\{(\w+)\}/g, (_, name) => params[name] ?? `{${name}}`);
+    }
+
+    function serviceText(service, field) {
+      return t(service[`${field}Key`]);
+    }
+
+    function applyStaticTranslations() {
+      document.documentElement.lang = state.locale;
+      document.title = t("meta.title");
+      document.querySelector('meta[name="description"]').content = t("meta.description");
+
+      document.querySelectorAll("[data-i18n]").forEach(node => {
+        node.textContent = t(node.dataset.i18n);
+      });
+      document.querySelectorAll("[data-i18n-html]").forEach(node => {
+        node.innerHTML = t(node.dataset.i18nHtml);
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach(node => {
+        node.setAttribute("aria-label", t(node.dataset.i18nAria));
+      });
+      document.querySelectorAll("[data-i18n-title]").forEach(node => {
+        node.title = t(node.dataset.i18nTitle);
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(node => {
+        node.placeholder = t(node.dataset.i18nPlaceholder);
+      });
+      document.querySelectorAll("[data-locale]").forEach(button => {
+        const active = button.dataset.locale === state.locale;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    }
+
+    function setLocale(locale) {
+      if (!TRANSLATIONS[locale] || locale === state.locale) return;
+      state.locale = locale;
+      try { localStorage.setItem("bus-xativa-locale", locale); } catch {}
+      applyStaticTranslations();
+      renderAll();
+      if (!leafletReady && !dom.fallbackMap.hidden) initFallbackMap();
+    }
 
     function toMinutes(time) {
       const [h, m] = time.split(":").map(Number);
@@ -1719,11 +2104,11 @@
     function getPassTime(serviceKey, stopIndex, tripIndex = getTripIndex(serviceKey)) {
       const service = services[serviceKey];
       if (serviceKey === "regular" && stopIndex === service.stops.length - 1) {
-        return { time: regularHospitalArrivals[tripIndex], kind: "publicado" };
+        return { time: regularHospitalArrivals[tripIndex], kind: "published" };
       }
       return {
         time: addMinutes(service.departures[tripIndex], service.offsets[stopIndex]),
-        kind: "estimado"
+        kind: "estimated"
       };
     }
 
@@ -1774,15 +2159,15 @@
           <div class="summary-heading">
             <div>
               <h2>L1 · Cosmógrafo Ramírez → Hospital</h2>
-              <p>Recorrido circular urbano de 8,89 km con 15 paradas principales.</p>
+              <p>${t("summary.regular.description")}</p>
             </div>
-            <span class="schedule-kind">laborable</span>
+            <span class="schedule-kind">${t("summary.workday")}</span>
           </div>
           <div class="summary-grid">
-            <div class="metric"><strong>15</strong><span>paradas</span></div>
-            <div class="metric"><strong>15</strong><span>vueltas</span></div>
-            <div class="metric"><strong>07:20</strong><span>primera</span></div>
-            <div class="metric"><strong>14:30</strong><span>última salida</span></div>
+            <div class="metric"><strong>15</strong><span>${t("summary.stops")}</span></div>
+            <div class="metric"><strong>15</strong><span>${t("summary.trips")}</span></div>
+            <div class="metric"><strong>07:20</strong><span>${t("summary.first")}</span></div>
+            <div class="metric"><strong>14:30</strong><span>${t("summary.last")}</span></div>
           </div>
         `;
       } else {
@@ -1791,15 +2176,15 @@
           <div class="summary-heading">
             <div>
               <h2>L2 · Albereda → Plaza Mayor</h2>
-              <p>7 paradas únicas; la ficha cuenta 8 al repetir Albereda al cerrar la vuelta.</p>
+              <p>${t("summary.commercial.description")}</p>
             </div>
-            <span class="schedule-kind">comercial</span>
+            <span class="schedule-kind">${t("summary.commercial")}</span>
           </div>
           <div class="summary-grid">
-            <div class="metric"><strong>7</strong><span>paradas únicas</span></div>
-            <div class="metric"><strong>11</strong><span>vueltas</span></div>
-            <div class="metric"><strong>16:00</strong><span>primera</span></div>
-            <div class="metric"><strong>21:00</strong><span>última salida</span></div>
+            <div class="metric"><strong>7</strong><span>${t("summary.uniqueStops")}</span></div>
+            <div class="metric"><strong>11</strong><span>${t("summary.trips")}</span></div>
+            <div class="metric"><strong>16:00</strong><span>${t("summary.first")}</span></div>
+            <div class="metric"><strong>21:00</strong><span>${t("summary.last")}</span></div>
           </div>
         `;
       }
@@ -1813,8 +2198,8 @@
       dom.tripSelect.innerHTML = service.departures.map((time, index) => {
         const suffix = key === "regular"
           ? ` · Hospital ${regularHospitalArrivals[index]}`
-          : ` · regreso ≈${addMinutes(time, 30)}`;
-        return `<option value="${index}" ${index === selected ? "selected" : ""}>Vuelta ${index + 1} · ${time}${suffix}</option>`;
+          : t("trip.returnSuffix", { time: addMinutes(time, 30) });
+        return `<option value="${index}" ${index === selected ? "selected" : ""}>${t("trip.option", { number: index + 1, time, suffix })}</option>`;
       }).join("");
 
       dom.tripChips.innerHTML = service.departures.map((time, index) => `
@@ -1834,26 +2219,26 @@
           : (nextGap !== null ? `${nextGap} min` : "—");
 
         dom.tripInsight.innerHTML = `
-          <div class="insight-card"><strong>${departure}</strong><span>salida oficial</span></div>
-          <div class="insight-card"><strong>${hospital}</strong><span>Hospital publicado</span></div>
-          <div class="insight-card"><strong>${frequencyLabel}</strong><span>intervalo cercano</span></div>
+          <div class="insight-card"><strong>${departure}</strong><span>${t("trip.officialDeparture")}</span></div>
+          <div class="insight-card"><strong>${hospital}</strong><span>${t("trip.publishedHospital")}</span></div>
+          <div class="insight-card"><strong>${frequencyLabel}</strong><span>${t("trip.nearbyInterval")}</span></div>
         `;
 
         const delta = duration - 28;
         const variationText = delta === 0
-          ? "Esta vuelta sigue el patrón estándar de unos 28 minutos hasta el Hospital."
+          ? t("trip.regularStandard")
           : delta > 0
-            ? `Esta vuelta incorpora una adaptación publicada: ${duration} min hasta el Hospital, ${delta} min más que el patrón estándar.`
-            : `Esta vuelta figura con ${duration} min hasta el Hospital, ${Math.abs(delta)} min menos que el patrón estándar.`;
-        dom.tripNote.innerHTML = `<strong>Vuelta ${selected + 1}:</strong> ${variationText} Los pasos intermedios que muestra el mapa son estimados.`;
+            ? t("trip.regularLonger", { duration, delta })
+            : t("trip.regularShorter", { duration, delta: Math.abs(delta) });
+        dom.tripNote.innerHTML = t("trip.note", { number: selected + 1, variation: variationText });
       } else {
         const departure = commercialDepartures[selected];
         dom.tripInsight.innerHTML = `
-          <div class="insight-card"><strong>${departure}</strong><span>salida Albereda</span></div>
+          <div class="insight-card"><strong>${departure}</strong><span>${t("trip.alberedaDeparture")}</span></div>
           <div class="insight-card"><strong>≈${addMinutes(departure, 16)}</strong><span>Plaza Mayor</span></div>
-          <div class="insight-card"><strong>≈${addMinutes(departure, 30)}</strong><span>vuelta completa</span></div>
+          <div class="insight-card"><strong>≈${addMinutes(departure, 30)}</strong><span>${t("trip.complete")}</span></div>
         `;
-        dom.tripNote.innerHTML = `<strong>Frecuencia:</strong> una salida cada 30 minutos. Servicio publicado para viernes, sábados y vísperas de festivo; sin servicio ordinario los domingos.`;
+        dom.tripNote.innerHTML = t("trip.commercialNote");
       }
     }
 
@@ -1868,7 +2253,7 @@
         .filter(({ stop }) => !query || normalize(`${stop.name} ${stop.short}`).includes(query));
 
       if (!filtered.length) {
-        dom.stopList.innerHTML = `<div class="empty-state">No hay paradas que coincidan con “${escapeHtml(state.search)}”.</div>`;
+        dom.stopList.innerHTML = `<div class="empty-state">${t("stops.empty", { query: escapeHtml(state.search) })}</div>`;
         return;
       }
 
@@ -1878,9 +2263,9 @@
         if (index < service.stops.length - 1) {
           segmentText = `→ ${service.stops[index + 1].short} · ≈${service.segments[index]} min`;
         } else if (key === "commercial") {
-          segmentText = "↻ regreso a Albereda · ≈14 min";
+          segmentText = t("stops.return");
         } else {
-          segmentText = "Fin del recorrido publicado";
+          segmentText = t("stops.end");
         }
 
         return `
@@ -1888,14 +2273,14 @@
             class="stop-item ${key} ${state.selectedStop[key] === index ? "active" : ""}"
             type="button"
             data-stop="${index}"
-            aria-label="Parada ${index + 1}, ${escapeHtml(stop.name)}, paso ${pass.time}"
+            aria-label="${t("stops.aria", { number: index + 1, name: escapeHtml(stop.name), time: pass.time })}"
           >
             <span class="stop-index ${key}">${index + 1}</span>
             <span class="stop-copy">
               <span class="stop-name">${escapeHtml(stop.name)}</span>
               <span class="stop-meta">${linesHtml(stop.lines)} <span>${escapeHtml(segmentText)}</span></span>
             </span>
-            <span class="stop-time"><strong>${pass.time}</strong><span>${pass.kind}</span></span>
+            <span class="stop-time"><strong>${pass.time}</strong><span>${t(`status.${pass.kind}`)}</span></span>
           </button>
         `;
       }).join("");
@@ -1907,11 +2292,11 @@
       const selected = state.selectedTrip[key];
 
       if (key === "regular") {
-        dom.scheduleTitle.textContent = "15 vueltas laborables";
-        dom.scheduleLead.textContent = "Salidas oficiales desde Cosmógrafo Ramírez. El intervalo habitual es de 30 minutos; los huecos publicados oscilan entre 28 y 38 minutos.";
+        dom.scheduleTitle.textContent = t("schedule.regularTitle");
+        dom.scheduleLead.textContent = t("schedule.regularLead");
       } else {
-        dom.scheduleTitle.textContent = "11 vueltas de Zona Comercial";
-        dom.scheduleLead.textContent = "Salidas estimadas cada 30 minutos desde Albereda Jaume I, 18, entre las 16:00 y las 21:00.";
+        dom.scheduleTitle.textContent = t("schedule.commercialTitle");
+        dom.scheduleLead.textContent = t("schedule.commercialLead");
       }
 
       const gaps = service.departures.slice(1).map((time, i) => durationMinutes(service.departures[i], time));
@@ -1919,14 +2304,14 @@
       const min = Math.min(...gaps);
       const max = Math.max(...gaps);
       const badge = key === "regular"
-        ? `media ${average.toFixed(1).replace(".", ",")} min`
-        : "cada 30 min";
+        ? t("schedule.average", { value: average.toFixed(1).replace(".", ",") })
+        : t("schedule.every");
 
       dom.frequencyCard.innerHTML = `
         <div class="frequency-top">
           <div>
-            <strong>Secuencia de salidas</strong>
-            <span>${key === "regular" ? `Intervalos: ${min}–${max} min` : "Intervalo uniforme de 30 min"}</span>
+            <strong>${t("schedule.sequence")}</strong>
+            <span>${key === "regular" ? t("schedule.intervals", { min, max }) : t("schedule.uniform")}</span>
           </div>
           <span class="frequency-badge">${badge}</span>
         </div>
@@ -1938,7 +2323,7 @@
               <div class="freq-step" style="width:${width}px">
                 <span class="freq-dot ${key}">${index + 1}</span>
                 <span class="freq-time">${time}</span>
-                <span class="freq-gap">${gap ? `+${gap} min` : "inicio"}</span>
+                <span class="freq-gap">${gap ? `+${gap} min` : t("schedule.start")}</span>
               </div>
             `;
           }).join("")}
@@ -1949,7 +2334,7 @@
         dom.scheduleTable.innerHTML = `
           <table>
             <thead>
-              <tr><th>Vuelta</th><th>Cosmógrafo</th><th>Intervalo</th><th>Hospital publicado</th><th>Duración</th></tr>
+              <tr><th>${t("schedule.trip")}</th><th>Cosmógrafo</th><th>${t("schedule.interval")}</th><th>${t("schedule.publishedHospital")}</th><th>${t("schedule.duration")}</th></tr>
             </thead>
             <tbody>
               ${regularDepartures.map((departure, index) => {
@@ -1972,7 +2357,7 @@
         dom.scheduleTable.innerHTML = `
           <table>
             <thead>
-              <tr><th>Vuelta</th><th>Salida Albereda</th><th>Plaza Mayor ≈</th><th>Regreso ≈</th><th>Frecuencia</th></tr>
+              <tr><th>${t("schedule.trip")}</th><th>${t("schedule.alberedaDeparture")}</th><th>Plaza Mayor ≈</th><th>${t("schedule.return")}</th><th>${t("schedule.frequency")}</th></tr>
             </thead>
             <tbody>
               ${commercialDepartures.map((departure, index) => `
@@ -1992,8 +2377,12 @@
 
     function renderMapHeading() {
       const service = getService();
-      dom.mapHeadline.textContent = `${service.code} · ${service.name}`;
-      dom.mapSubline.textContent = `${service.description} · ${service.departures.length} vueltas · ${service.style}`;
+      dom.mapHeadline.textContent = `${service.code} · ${serviceText(service, "name")}`;
+      dom.mapSubline.textContent = t("map.heading", {
+        description: serviceText(service, "description"),
+        count: service.departures.length,
+        style: serviceText(service, "style")
+      });
     }
 
     function setActiveService(serviceKey, options = {}) {
@@ -2084,23 +2473,23 @@
       let nextText;
 
       if (stopIndex < service.stops.length - 1) {
-        nextText = `Siguiente: ${service.stops[stopIndex + 1].short} · ≈${service.segments[stopIndex]} min`;
+        nextText = t("popup.next", { stop: service.stops[stopIndex + 1].short, minutes: service.segments[stopIndex] });
       } else if (serviceKey === "commercial") {
-        nextText = "Regreso estimado a Albereda en unos 14 min.";
+        nextText = t("popup.return");
       } else {
-        nextText = "Llegada publicada al Hospital para esta vuelta.";
+        nextText = t("popup.arrival");
       }
 
-      const extra = stop.note ? `<p class="popup-note">${escapeHtml(stop.note)}</p>` : "";
+      const extra = stop.noteKey ? `<p class="popup-note">${escapeHtml(t(stop.noteKey))}</p>` : "";
 
       return `
-        <span class="popup-route ${serviceKey}">${service.code} · Vuelta ${tripIndex + 1}</span>
+        <span class="popup-route ${serviceKey}">${service.code} · ${t("popup.trip", { number: tripIndex + 1 })}</span>
         <h3 class="popup-title">${stopIndex + 1}. ${escapeHtml(stop.name)}</h3>
         <div class="popup-time">
-          <div class="popup-metric"><strong>${pass.time}</strong><span>paso ${pass.kind}</span></div>
-          <div class="popup-metric"><strong>${departure}</strong><span>salida de vuelta</span></div>
+          <div class="popup-metric"><strong>${pass.time}</strong><span>${t("popup.pass", { kind: t(`status.${pass.kind}`) })}</span></div>
+          <div class="popup-metric"><strong>${departure}</strong><span>${t("popup.departure")}</span></div>
         </div>
-        <p class="popup-note">${escapeHtml(nextText)}<br>Capas disponibles: ${stop.lines.join(" · ")}.</p>
+        <p class="popup-note">${escapeHtml(nextText)}<br>${t("popup.layers", { lines: stop.lines.join(" · ") })}</p>
         ${extra}
       `;
     }
@@ -2129,7 +2518,7 @@
         interactive: true
       })
         .bindTooltip(
-          `${service.code} · ${service.name}`,
+          `${service.code} · ${serviceText(service, "name")}`,
           { sticky: true, direction: "top", opacity: .95 }
         )
         .addTo(layer);
@@ -2284,7 +2673,7 @@
     function toggleLayer(serviceKey) {
       const other = serviceKey === "regular" ? "commercial" : "regular";
       if (state.visible[serviceKey] && !state.visible[other]) {
-        showToast("Debe permanecer visible al menos una ruta.");
+        showToast(t("toast.keepRoute"));
         return;
       }
       state.visible[serviceKey] = !state.visible[serviceKey];
@@ -2300,7 +2689,8 @@
         state.animationTimer = null;
       }
       state.animationRunning = false;
-      dom.playTour.innerHTML = `<span aria-hidden="true">▶</span><span class="play-label">Recorrer</span>`;
+      dom.playTour.innerHTML = `<span aria-hidden="true">▶</span><span class="play-label">${t("tour.play")}</span>`;
+      dom.playTour.title = t("tour.playTitle");
       dom.playTour.disabled = false;
       if (leafletReady && vehicleMarker) {
         map.removeLayer(vehicleMarker);
@@ -2320,7 +2710,7 @@
       let index = 0;
 
       state.animationRunning = true;
-      dom.playTour.innerHTML = `<span aria-hidden="true">■</span><span class="play-label">Detener</span>`;
+      dom.playTour.innerHTML = `<span aria-hidden="true">■</span><span class="play-label">${t("tour.stop")}</span>`;
 
       function step() {
         if (!state.animationRunning) return;
@@ -2357,7 +2747,7 @@
             renderStopList();
             updateMarkerStylesAndPopups();
             stopAnimation();
-            showToast(`${service.code}: recorrido visualizado.`);
+            showToast(t("toast.tourComplete", { line: service.code }));
           }, 900);
         }
       }
@@ -2368,11 +2758,11 @@
 
     function locateUser() {
       if (!navigator.geolocation) {
-        showToast("Este navegador no ofrece geolocalización.");
+        showToast(t("geo.unsupported"));
         return;
       }
 
-      showToast("Solicitando tu ubicación…");
+      showToast(t("geo.requesting"));
       navigator.geolocation.getCurrentPosition(
         position => {
           const lat = position.coords.latitude;
@@ -2380,7 +2770,7 @@
           const accuracy = position.coords.accuracy;
 
           if (!leafletReady) {
-            showToast("Ubicación obtenida; el mapa base no está disponible.");
+            showToast(t("geo.noMap"));
             return;
           }
 
@@ -2390,12 +2780,12 @@
           userMarker = L.marker([lat, lng], {
             icon: L.divIcon({
               className: "stop-div-icon",
-              html: `<div class="user-location" title="Tu ubicación"></div>`,
+              html: `<div class="user-location" title="${t("geo.yourLocation")}"></div>`,
               iconSize: [18, 18],
               iconAnchor: [9, 9]
             }),
             zIndexOffset: 1200
-          }).addTo(map).bindPopup(`Tu ubicación aproximada<br><small>Precisión: ±${Math.round(accuracy)} m</small>`);
+          }).addTo(map).bindPopup(`${t("geo.approximate")}<br><small>${t("geo.accuracy", { accuracy: Math.round(accuracy) })}</small>`);
 
           userAccuracy = L.circle([lat, lng], {
             radius: accuracy,
@@ -2407,12 +2797,12 @@
 
           map.flyTo([lat, lng], 15, { duration: .8 });
           userMarker.openPopup();
-          showToast("Ubicación mostrada.");
+          showToast(t("geo.shown"));
         },
         error => {
           const message = error.code === 1
-            ? "No se ha concedido permiso de ubicación."
-            : "No se ha podido obtener la ubicación.";
+            ? t("geo.denied")
+            : t("geo.failed");
           showToast(message);
         },
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
@@ -2463,7 +2853,7 @@
       }
 
       dom.fallbackCanvas.innerHTML = `
-        <svg viewBox="0 0 ${W} ${H}" aria-label="Plano esquemático de las rutas">
+        <svg viewBox="0 0 ${W} ${H}" aria-label="${t("fallback.svgLabel")}">
           <defs>
             <pattern id="grid" width="55" height="55" patternUnits="userSpaceOnUse">
               <path d="M 55 0 L 0 0 0 55" fill="none" stroke="#cbd8e4" stroke-width="1"></path>
@@ -2518,8 +2908,8 @@
       dom.fallbackPopup.hidden = false;
       dom.fallbackPopup.innerHTML = `
         <strong>${service.code} · ${index + 1}. ${escapeHtml(stop.name)}</strong><br>
-        Paso ${pass.kind}: <strong>${pass.time}</strong><br>
-        Vuelta ${state.selectedTrip[serviceKey] + 1} · salida ${getDeparture(serviceKey)}
+        ${t("fallback.pass", { kind: t(`status.${pass.kind}`) })}: <strong>${pass.time}</strong><br>
+        ${t("fallback.trip", { number: state.selectedTrip[serviceKey] + 1, time: getDeparture(serviceKey) })}
       `;
     }
 
@@ -2534,8 +2924,8 @@
           properties: {
             id: key,
             line: service.code,
-            name: service.name,
-            schedule: service.description,
+            name: serviceText(service, "name"),
+            schedule: serviceText(service, "description"),
             geometry_accuracy: "orientative"
           },
           geometry: {
@@ -2564,7 +2954,7 @@
 
       return {
         type: "FeatureCollection",
-        name: "Autobus urbano de Xativa - L1 y L2",
+        name: t("download.collectionName"),
         generated: "2026-07-15",
         features
       };
@@ -2588,7 +2978,7 @@
         JSON.stringify(buildGeoJSON(), null, 2),
         "application/geo+json;charset=utf-8"
       );
-      showToast("GeoJSON preparado.");
+      showToast(t("download.geojsonReady"));
     }
 
     function csvEscape(value) {
@@ -2598,25 +2988,29 @@
 
     function downloadCSV() {
       const rows = [];
-      rows.push(["linea", "vuelta", "salida", "destino_o_retorno", "hora", "intervalo_min", "tipo"]);
+      rows.push(t("download.csvHeaders").split(","));
 
       regularDepartures.forEach((departure, index) => {
         const gap = index === 0 ? "" : durationMinutes(regularDepartures[index - 1], departure);
-        rows.push(["L1", index + 1, departure, "Hospital Lluís Alcanyís", regularHospitalArrivals[index], gap, "publicado"]);
+        rows.push(["L1", index + 1, departure, "Hospital Lluís Alcanyís", regularHospitalArrivals[index], gap, t("status.published")]);
       });
 
       commercialDepartures.forEach((departure, index) => {
-        rows.push(["L2", index + 1, departure, "Centre Comercial Plaza Mayor", addMinutes(departure, 16), index === 0 ? "" : 30, "estimado"]);
-        rows.push(["L2", index + 1, departure, "Regreso Albereda Jaume I, 18", addMinutes(departure, 30), "", "estimado"]);
+        rows.push(["L2", index + 1, departure, "Centre Comercial Plaza Mayor", addMinutes(departure, 16), index === 0 ? "" : 30, t("status.estimated")]);
+        rows.push(["L2", index + 1, departure, t("download.returnDestination"), addMinutes(departure, 30), "", t("status.estimated")]);
       });
 
       const csv = "\uFEFF" + rows.map(row => row.map(csvEscape).join(",")).join("\n");
       downloadBlob("xativa_bus_urbano_horarios.csv", csv, "text/csv;charset=utf-8");
-      showToast("CSV de horarios preparado.");
+      showToast(t("download.csvReady"));
     }
 
     document.querySelectorAll(".service-tab").forEach(button => {
       button.addEventListener("click", () => setActiveService(button.dataset.service));
+    });
+
+    document.querySelectorAll("[data-locale]").forEach(button => {
+      button.addEventListener("click", () => setLocale(button.dataset.locale));
     });
 
     document.querySelectorAll(".tab-btn").forEach(button => {
@@ -2629,7 +3023,7 @@
 
     document.querySelector('[data-action="fit"]').addEventListener("click", () => {
       if (leafletReady) fitVisibleLayers();
-      else showToast("El plano esquemático ya muestra las rutas completas.");
+      else showToast(t("toast.fallbackFit"));
     });
 
     document.querySelector('[data-action="locate"]').addEventListener("click", locateUser);
@@ -2682,6 +3076,7 @@
       if (leafletReady) map.invalidateSize();
     });
 
+    applyStaticTranslations();
     renderAll();
     initMap();
   </script>
