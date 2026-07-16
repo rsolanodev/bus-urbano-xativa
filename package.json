@@ -8,9 +8,12 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "npm run check && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check && npm run validate:routes",
+    "test": "node --test",
+    "validate:routes": "node scripts/validate-routes.mjs",
+    "generate:routes": "node scripts/generate-routes.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

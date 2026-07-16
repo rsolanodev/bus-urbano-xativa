@@ -11,6 +11,16 @@ import {
   regularStops,
   services
 } from "../data/services.js";
+import {
+  buildRouteMetrics,
+  getOccurrenceIndexAtDistance,
+  sampleRouteAtDistance
+} from "./route-geometry.js";
+
+const TOUR_SPEED_MPS = 300;
+Object.values(services).forEach(service => {
+  service.routeMetrics = buildRouteMetrics(service.route);
+});
 
 const state = {
       activeService: "regular",
@@ -20,6 +30,7 @@ const state = {
       activeTab: "stops",
       search: "",
       animationTimer: null,
+      animationFrame: null,
       animationRunning: false,
       toastTimer: null
     };
@@ -29,6 +40,8 @@ const state = {
     let layers = {};
     let markerRefs = { regular: [], commercial: [] };
     let vehicleMarker = null;
+    let fallbackVehicleMarker = null;
+    let fallbackProjection = null;
     let userMarker = null;
     let userAccuracy = null;
 
@@ -162,7 +175,7 @@ const state = {
           <div class="summary-heading">
             <div>
               <h2>L1 · Cosmógrafo Ramírez → Hospital</h2>
-              <p>Recorrido circular urbano de 8,89 km con 15 paradas principales.</p>
+          <p>El Ayuntamiento publica 8,89 km; el trazado reconstruido es orientativo.</p>
             </div>
             <span class="schedule-kind">laborable</span>
           </div>
@@ -415,6 +428,7 @@ const state = {
     function selectStop(serviceKey, index, focusMap = true) {
       if (!services[serviceKey] || !services[serviceKey].stops[index]) return;
       if (serviceKey !== state.activeService) {
+        stopAnimation();
         state.activeService = serviceKey;
         state.visible[serviceKey] = true;
         renderServiceTabs();
@@ -522,11 +536,7 @@ const state = {
         )
         .addTo(layer);
 
-      const labelPoint = serviceKey === "regular"
-        ? [38.9989, -0.5109]
-        : [39.0016, -0.5282];
-
-      L.marker(labelPoint, {
+      L.marker(service.labelPoint, {
         interactive: false,
         icon: L.divIcon({
           className: "route-label-icon",
@@ -595,6 +605,7 @@ const state = {
         for (const key of ["regular", "commercial"]) {
           const index = markerRefs[key].indexOf(marker);
           if (index >= 0) {
+            if (key !== state.activeService) stopAnimation();
             state.activeService = key;
             state.selectedStop[key] = index;
             renderServiceTabs();
@@ -670,6 +681,7 @@ const state = {
     }
 
     function toggleLayer(serviceKey) {
+      stopAnimation();
       const other = serviceKey === "regular" ? "commercial" : "regular";
       if (state.visible[serviceKey] && !state.visible[other]) {
         showToast("Debe permanecer visible al menos una ruta.");
@@ -684,8 +696,12 @@ const state = {
 
     function stopAnimation() {
       if (state.animationTimer) {
-        clearInterval(state.animationTimer);
+        clearTimeout(state.animationTimer);
         state.animationTimer = null;
+      }
+      if (state.animationFrame) {
+        cancelAnimationFrame(state.animationFrame);
+        state.animationFrame = null;
       }
       state.animationRunning = false;
       dom.playTour.innerHTML = `<span aria-hidden="true">▶</span><span class="play-label">Recorrer</span>`;
@@ -694,6 +710,62 @@ const state = {
         map.removeLayer(vehicleMarker);
         vehicleMarker = null;
       }
+      if (fallbackVehicleMarker) {
+        fallbackVehicleMarker.hidden = true;
+      }
+    }
+
+    function showVehicle(position) {
+      if (leafletReady) {
+        if (!vehicleMarker) {
+          vehicleMarker = L.marker(position, {
+            zIndexOffset: 1000,
+            icon: L.divIcon({
+              className: "bus-div-icon",
+              html: `<div class="bus-dot" aria-label="Autobús">🚌</div>`,
+              iconSize: [38, 38],
+              iconAnchor: [19, 19]
+            })
+          }).addTo(map);
+        } else {
+          vehicleMarker.setLatLng(position);
+        }
+        return;
+      }
+
+      if (fallbackVehicleMarker && fallbackProjection) {
+        const [x, y] = projectFallback(
+          position[0],
+          position[1],
+          fallbackProjection.bounds,
+          fallbackProjection.width,
+          fallbackProjection.height,
+          fallbackProjection.padding
+        );
+        fallbackVehicleMarker.hidden = false;
+        fallbackVehicleMarker.setAttribute("transform", `translate(${x} ${y})`);
+      }
+    }
+
+    function selectTourOccurrence(serviceKey, occurrenceIndex) {
+      const occurrence = services[serviceKey].stopOccurrences[occurrenceIndex];
+      if (!occurrence || state.selectedStop[serviceKey] === occurrence.stopIndex) return;
+      state.selectedStop[serviceKey] = occurrence.stopIndex;
+      renderStopList();
+      updateMarkerStylesAndPopups();
+      if (!leafletReady) showFallbackPopup(serviceKey, occurrence.stopIndex);
+    }
+
+    function finishTour(serviceKey, originalStop) {
+      state.animationFrame = null;
+      state.animationTimer = setTimeout(() => {
+        state.animationTimer = null;
+        state.selectedStop[serviceKey] = originalStop;
+        renderStopList();
+        updateMarkerStylesAndPopups();
+        stopAnimation();
+        showToast(`${services[serviceKey].code}: vuelta completa visualizada.`);
+      }, 700);
     }
 
     function playTour() {
@@ -705,53 +777,46 @@ const state = {
       const key = state.activeService;
       const service = services[key];
       const originalStop = state.selectedStop[key];
-      let index = 0;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        showToast("Movimiento reducido activo: usa la lista de paradas para recorrer la línea.");
+        return;
+      }
 
       state.animationRunning = true;
       dom.playTour.innerHTML = `<span aria-hidden="true">■</span><span class="play-label">Detener</span>`;
 
-      function step() {
+      const startedAt = performance.now();
+      const durationMs = service.routeMetrics.totalDistanceM / TOUR_SPEED_MPS * 1000;
+      let activeOccurrence = -1;
+      let lastPanAt = 0;
+
+      function frame(now) {
         if (!state.animationRunning) return;
-        state.selectedStop[key] = index;
-        renderStopList();
-        updateMarkerStylesAndPopups();
+        const progress = Math.min(1, (now - startedAt) / durationMs);
+        const distanceAlongM = service.routeMetrics.totalDistanceM * progress;
+        const sample = sampleRouteAtDistance(
+          service.route,
+          service.routeMetrics.cumulativeDistances,
+          distanceAlongM
+        );
+        showVehicle(sample.position);
 
-        const stop = service.stops[index];
-        if (leafletReady) {
-          if (!vehicleMarker) {
-            vehicleMarker = L.marker([stop.lat, stop.lng], {
-              zIndexOffset: 1000,
-              icon: L.divIcon({
-                className: "bus-div-icon",
-                html: `<div class="bus-dot" aria-label="Autobús">🚌</div>`,
-                iconSize: [38, 38],
-                iconAnchor: [19, 19]
-              })
-            }).addTo(map);
-          } else {
-            vehicleMarker.setLatLng([stop.lat, stop.lng]);
-          }
-          map.panInside([stop.lat, stop.lng], { padding: [70, 70], animate: true });
-        } else {
-          showFallbackPopup(key, index);
+        const occurrenceIndex = getOccurrenceIndexAtDistance(service.stopOccurrences, distanceAlongM);
+        if (occurrenceIndex !== activeOccurrence) {
+          activeOccurrence = occurrenceIndex;
+          selectTourOccurrence(key, occurrenceIndex);
+        }
+        if (leafletReady && now - lastPanAt > 500) {
+          map.panInside(sample.position, { padding: [70, 70], animate: false });
+          lastPanAt = now;
         }
 
-        index += 1;
-        if (index >= service.stops.length) {
-          clearInterval(state.animationTimer);
-          state.animationTimer = null;
-          setTimeout(() => {
-            state.selectedStop[key] = originalStop;
-            renderStopList();
-            updateMarkerStylesAndPopups();
-            stopAnimation();
-            showToast(`${service.code}: recorrido visualizado.`);
-          }, 900);
-        }
+        if (progress === 1) finishTour(key, originalStop);
+        else state.animationFrame = requestAnimationFrame(frame);
       }
 
-      step();
-      state.animationTimer = setInterval(step, 850);
+      state.animationFrame = requestAnimationFrame(frame);
     }
 
     function locateUser() {
@@ -834,6 +899,7 @@ const state = {
       const W = 1100;
       const H = 780;
       const P = 68;
+      fallbackProjection = { bounds, width: W, height: H, padding: P };
 
       function points(route) {
         return route.map(([lat, lng]) => projectFallback(lat, lng, bounds, W, H, P).join(",")).join(" ");
@@ -877,8 +943,13 @@ const state = {
             <polyline points="${points(commercialRoute)}" fill="none" stroke="${COLORS.commercial}" stroke-width="6" stroke-dasharray="12 10" stroke-linecap="round" stroke-linejoin="round"></polyline>
             ${commercialStops.map((s, i) => stopSvg("commercial", s, i)).join("")}
           </g>
+          <g id="fallbackVehicle" hidden aria-label="Autobús en el recorrido" filter="url(#shadow)">
+            <circle r="19" fill="#ffffff" stroke="#10233f" stroke-width="3"></circle>
+            <text y="4" text-anchor="middle" fill="#10233f" font-size="9" font-weight="900">BUS</text>
+          </g>
         </svg>
       `;
+      fallbackVehicleMarker = document.getElementById("fallbackVehicle");
 
       dom.fallbackCanvas.querySelectorAll("[data-fallback-stop]").forEach(node => {
         const activate = () => {
@@ -924,23 +995,33 @@ const state = {
             line: service.code,
             name: service.name,
             schedule: service.description,
-            geometry_accuracy: "orientative"
+            geometry_accuracy: service.routeMetadata.geometryAccuracy,
+            source: service.routeMetadata.source,
+            source_url: service.routeMetadata.sourceUrl,
+            router: service.routeMetadata.router,
+            routing_profile: service.routeMetadata.routingProfile,
+            generated_at: service.routeMetadata.generatedAt,
+            distance_m: service.routeMetadata.distanceM,
+            license: service.routeMetadata.license
           },
-          geometry: {
-            type: "LineString",
-            coordinates: service.route.map(([lat, lng]) => [lng, lat])
-          }
+          geometry: structuredClone(service.routeFeature.geometry)
         });
 
         service.stops.forEach((stop, index) => {
+          const occurrence = service.stopOccurrences.find(item => item.stopIndex === index && !item.terminal);
           features.push({
             type: "Feature",
             properties: {
+              stop_id: stop.id,
               line: service.code,
               stop_number: index + 1,
+              stop_sequence: occurrence.sequence,
               name: stop.name,
               lines: stop.lines.join(","),
-              coordinate_accuracy: "orientative"
+              coordinate_accuracy: "orientative",
+              route_distance_m: occurrence.distanceAlongM,
+              snap_distance_m: occurrence.snapDistanceM,
+              route_segment_index: occurrence.segmentIndex
             },
             geometry: {
               type: "Point",
@@ -953,7 +1034,10 @@ const state = {
       return {
         type: "FeatureCollection",
         name: "Autobus urbano de Xativa - L1 y L2",
-        generated: "2026-07-15",
+        generated: new Date(Math.max(
+          ...Object.values(services).map(service => Date.parse(service.routeMetadata.generatedAt))
+        )).toISOString(),
+        attribution: "Route geometry derived from OpenStreetMap data (ODbL).",
         features
       };
     }

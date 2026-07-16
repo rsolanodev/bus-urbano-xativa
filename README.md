@@ -25,3 +25,14 @@ npm run build
 - `src/styles/`: estilos globales y adaptaciones responsive.
 
 La salida es completamente estática y se genera en `dist/`.
+
+## Datos geográficos
+
+Los recorridos precalculados están versionados en `src/data/routes/`. Se generan mediante ajuste a la red viaria de OpenStreetMap y se consumen como una única fuente desde Leaflet, el plano SVG, la animación y la descarga GeoJSON.
+
+```sh
+npm run validate:routes
+npm test
+```
+
+`npm run generate:routes` regenera los trazados mediante servicios públicos de routing. Es una operación manual: sus resultados deben revisarse sobre el mapa antes de publicarlos. El build normal no realiza peticiones externas.
